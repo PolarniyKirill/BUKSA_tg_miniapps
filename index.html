@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Добро пожаловать!</h1>
+    <p>Нажмите кнопку, чтобы подтвердить вход.</p>
+    <button id="confirmButton">Привет, заходи к нам</button>
+
+    <script>
+        // Проверяем, что приложение запущено в Telegram
+        if (window.Telegram?.WebApp) {
+            const webApp = Telegram.WebApp;
+
+            // Получаем данные о пользователе
+            const user = webApp.initDataUnsafe.user;
+            const userId = user.id; // ID пользователя
+            const username = user.username || "no_username"; // Логин пользователя
+
+            // Обработчик кнопки
+            document.getElementById('confirmButton').addEventListener('click', () => {
+                // Отправляем данные обратно в бота
+                webApp.sendData(JSON.stringify({ userId, username }));
+                
+                // Закрываем приложение
+                webApp.close();
+            });
+        } else {
+            alert("Это приложение должно быть запущено внутри Telegram!");
+        }
+    </script>
+</body>
+</html>
